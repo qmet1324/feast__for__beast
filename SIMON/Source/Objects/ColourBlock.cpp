@@ -37,5 +37,18 @@ void ColourBlock::Draw(bool filled)
 
 void ColourBlock::Update()
 {
+	transform.position.x += velocityX;
+	transform.position.y += velocityY;
+}
 
+void ColourBlock::SetVelocity(int x, int y)
+{
+	velocityX = x;
+	velocityY = y;
+}
+
+void ColourBlock::Move(int x, int y)
+{
+	transform.position.x += x;
+	transform.position.y += y;
 }

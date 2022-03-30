@@ -16,9 +16,16 @@ public:
 
 	void SetColor(int r, int g, int b);
 
+	void SetVelocity(int x, int y);
+
+	void Move(int x, int y);
+
 	Transform2D GetTransform() { return transform; }
 	Vec2D GetDimensions() { return dimensions; }
 	Colour GetColor() { return colour; }
+
+	int GetVelocityX() { return velocityX; }
+	int GetVelocityY() { return velocityY; }
 
 private:
 
@@ -30,5 +37,9 @@ private:
 
 	// colour to draw with
 	Colour colour;
+
+	int velocityX = 0;
+	int velocityY = 0;
+
 };
 
