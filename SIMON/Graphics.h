@@ -17,7 +17,7 @@ public:
 	static void SetColor(Colour color);
 	static void DrawRect(Transform2D transform, Vec2D dimensions, bool isFilled = false);
 	static void DrawLine(Transform2D transform, Vec2D dimensions);
-	static void DrawText(const char* text, float x, float y, int width, int height);
+	static void DrawText(const char* text, float x, float y, int width, int height, SDL_Color color);
 private:
 	// some SDL specific variables:
 	static SDL_Window* window;

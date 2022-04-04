@@ -52,20 +52,22 @@ void ColourBlock::SetVelocity(int x, int y)
 // Move function to move player character.
 void ColourBlock::Move()
 {
-	if (inputs.events[0])
+	// keyboard inputs
+	if (inputs.events[0] && transform.position.y > 0)
 	{
-		transform.position.y-=10;
+		transform.position.y -= 10;
 	}
-	if (inputs.events[1])
+	if (inputs.events[1] && transform.position.y < 600 - 25)
 	{
 		transform.position.y += 10;
 	}
-	if (inputs.events[2])
+	if (inputs.events[2] && transform.position.x > 0)
 	{
 		transform.position.x -= 10;
 	}
-	if (inputs.events[3])
+	if (inputs.events[3] && transform.position.x < 800 - 25)
 	{
 		transform.position.x += 10;
 	}
+
 }

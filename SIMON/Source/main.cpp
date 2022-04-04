@@ -10,7 +10,9 @@ bool GameRunning = true;
 
 void PositionFood(ColourBlock& foodType, int randomNumber);
 
-void RePosFood(ColourBlock& foodType);
+void RePosFood(ColourBlock& foodType, ColourBlock& player);
+
+bool checkCollision(ColourBlock A, ColourBlock B);
 
 // argc and argv here are command line parameters passed to the program when running the program. 
 // we won't actually use them but our 2D Graphics Library requires the main setup like this.
@@ -19,8 +21,19 @@ void RePosFood(ColourBlock& foodType);
 int main(int argc, char* argv[])
 {
 	int currentScore = 0;
+	char score[10];
+	int currentLives = 5;
+	char lives[10];
 	const int numFood = 3;
 	bool filled = true;
+
+	SDL_Color Red = { 255, 0, 0 };
+	SDL_Color Green = { 0, 255, 0 };
+	SDL_Color Blue = { 0, 0, 255 };
+	SDL_Color Yellow = { 255, 255, 0 };
+	SDL_Color Cyan = { 0, 255, 255 };
+	SDL_Color Magenta = { 255, 0, 255 };
+	SDL_Color White = { 255, 255, 255 };
 
 	srand(time(NULL));
 
@@ -53,8 +66,7 @@ int main(int argc, char* argv[])
 	//bool isAnimating = true;
 	//bool isBlankFrame = true;
 	//int currentPatternSize = 4;
-	int randomNumberBad = 0;
-	int randomNumberGood = 0;
+	
 
 	// Initialize Player
 	sumo.Init(800 / 2 - 25, 600 / 2 - 25, 25, 25);
@@ -96,20 +108,60 @@ int main(int argc, char* argv[])
 			goodFood[i].Update();
 			goodFood[i].Draw(filled);
 
-			RePosFood(badFood[i]);
-			RePosFood(goodFood[i]);
+			// Collision Detecttion bad food
+			if (checkCollision(sumo, badFood[i]))
+			{
+				currentScore -= 50;
+			}
+
+			// Collision Detecttion good food
+			if (checkCollision(sumo, goodFood[i]))
+			{
+				currentScore += 100;
+			}
+
+			// Respawn Food
+			RePosFood(badFood[i], sumo);
+			RePosFood(goodFood[i], sumo);
 		}
 
-		//  Render Blowfish
+		// Render Blowfish
 		blowfish.Update();
 		blowfish.Draw(filled);
-		RePosFood(blowfish);
+
+		// Collision Detecttion
+		if (checkCollision(sumo, blowfish))
+		{
+			currentLives--;
+			RePosFood(blowfish, sumo);
+			sumo.Init(800 / 2 - 25, 600 / 2 - 25, 25, 25);
+		}
+
+		// Respawn blowfish
+		RePosFood(blowfish, sumo);
+
+		// draw text
+		_itoa_s(currentLives, lives, 10);
+		_itoa_s(currentScore, score, 10);
+
+		Graphics::DrawText("Score: ", 0, 0, 100, 50, Cyan);
+		Graphics::DrawText(score, 110, 0, 100, 50, Cyan);
+
+		Graphics::DrawText("Lives: ", 800 - 125, 0, 100, 50, Magenta);
+		Graphics::DrawText(lives, 800 - 25, 0, 25, 50, Magenta);
+
+		if (currentLives <= 0)
+		{
+			GameRunning = false;
+		}
 
 		Graphics::EndRender();
 
 		SDL_Delay(16);
 	}
 
+
+	Graphics::DrawText("Game Over", 800 / 2 - 50, 600 / 2 - 25, 100, 50, White);
 	//close off the SDL window
 	SDL_Quit();
 
@@ -139,24 +191,69 @@ void PositionFood(ColourBlock& foodType, int randomNumber)
 	}
 }
 
-void RePosFood(ColourBlock& foodType)
+void RePosFood(ColourBlock& foodType, ColourBlock& player)
 {
 	Transform2D Pos = foodType.GetTransform();
 
-	if (foodType.GetVelocityX() > 0 && Pos.position.x > 800)
+	if ((foodType.GetVelocityX() > 0 && Pos.position.x > 800) || checkCollision(player, foodType))
 	{
 		PositionFood(foodType, rand() % 4);
 	}
-	if (foodType.GetVelocityX() < 0 && Pos.position.x < 0)
+	if ((foodType.GetVelocityX() < 0 && Pos.position.x < 0) || checkCollision(player, foodType))
 	{
 		PositionFood(foodType, rand() % 4);
 	}
-	if (foodType.GetVelocityY() > 0 && Pos.position.y > 600)
+	if ((foodType.GetVelocityY() > 0 && Pos.position.y > 600) || checkCollision(player, foodType))
 	{
 		PositionFood(foodType, rand() % 4);
 	}
-	if (foodType.GetVelocityY() < 0 && Pos.position.y < 0)
+	if ((foodType.GetVelocityY() < 0 && Pos.position.y < 0) || checkCollision(player, foodType))
 	{
 		PositionFood(foodType, rand() % 4);
 	}
+}
+
+bool checkCollision(ColourBlock A, ColourBlock B)
+{
+
+	Transform2D posA, posB;
+	Vec2D dimA, dimB;
+	int topA, topB;
+	int botA, botB;
+	int leftA, leftB;
+	int rightA, rightB;
+
+	posA = A.GetTransform();
+	posB = B.GetTransform();
+	dimA = A.GetDimensions();
+	dimB = B.GetDimensions();
+
+	topA = posA.position.y;
+	botA = posA.position.y + dimA.y;
+	leftA = posA.position.x;
+	rightA = posA.position.x + dimA.x;
+
+	topB = posB.position.y;
+	botB = posB.position.y + dimB.y;
+	leftB = posB.position.x;
+	rightB = posB.position.x + dimB.x;
+
+	if (botA <= topB)
+	{
+		return false;
+	}
+	if (topA >= botB)
+	{
+		return false;
+	}
+	if (rightA <= leftB)
+	{
+		return false;
+	}
+	if (leftA >= rightB)
+	{
+		return false;
+	}
+
+	return true;
 }
