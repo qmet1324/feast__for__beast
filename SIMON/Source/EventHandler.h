@@ -5,6 +5,8 @@ enum GameEvents
 {
 	W_PRESSED,
 	S_PRESSED,
+	A_PRESSED,
+	D_PRESSED,
 	UP_PRESSED,
 	DOWN_PRESSED,
 

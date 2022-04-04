@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+using namespace std;
+
 bool EventHandler::events[];
 
 EventHandler::EventHandler()
@@ -30,6 +32,16 @@ bool EventHandler::Update()
 		case SDLK_s:
 		{
 			SetButton(GameEvents::S_PRESSED, currEvents.key.type == SDL_KEYDOWN);
+			break;
+		}
+		case SDLK_a: //added 'a' for left 
+		{
+			SetButton(GameEvents::A_PRESSED, currEvents.key.type == SDL_KEYDOWN);
+			break;
+		}
+		case SDLK_d: //added 'd' for right
+		{
+			SetButton(GameEvents::D_PRESSED, currEvents.key.type == SDL_KEYDOWN);
 			break;
 		}
 		case SDLK_UP:

@@ -4,6 +4,8 @@
 #include "../EventHandler.h"
 #include "../Graphics.h"
 
+EventHandler inputs;
+
 ColourBlock::ColourBlock()
 {
 }
@@ -47,8 +49,23 @@ void ColourBlock::SetVelocity(int x, int y)
 	velocityY = y;
 }
 
-void ColourBlock::Move(int x, int y)
+// Move function to move player character.
+void ColourBlock::Move()
 {
-	transform.position.x += x;
-	transform.position.y += y;
+	if (inputs.events[0])
+	{
+		transform.position.y-=10;
+	}
+	if (inputs.events[1])
+	{
+		transform.position.y += 10;
+	}
+	if (inputs.events[2])
+	{
+		transform.position.x -= 10;
+	}
+	if (inputs.events[3])
+	{
+		transform.position.x += 10;
+	}
 }

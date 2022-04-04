@@ -18,7 +18,7 @@ public:
 
 	void SetVelocity(int x, int y);
 
-	void Move(int x, int y);
+	void Move();
 
 	Transform2D GetTransform() { return transform; }
 	Vec2D GetDimensions() { return dimensions; }
