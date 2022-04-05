@@ -30,6 +30,18 @@
     <ClInclude Include="Source\Objects\ObjData.h" />
     <ClInclude Include="Source\Objects\ColourBlock.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="background.png" />
+    <Image Include="blowfish.png" />
+    <Image Include="health_apple.png" />
+    <Image Include="health_fish.png" />
+    <Image Include="health_onigiri.png" />
+    <Image Include="menu_scene_bg.png" />
+    <Image Include="rotten_apple.png" />
+    <Image Include="rotten_fish.png" />
+    <Image Include="rotten_onigiri.png" />
+    <Image Include="sumo_idle.png" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{60e5e4b6-bf79-4809-a8e3-e4561d9ba0f3}</ProjectGuid>
