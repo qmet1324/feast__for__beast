@@ -10,7 +10,7 @@ public:
 	void Update();
 
 	// used to render the object to the screen
-	void Draw(bool filled = false);
+	void Draw(SDL_Texture*& objSprite, bool filled = false);
 
 	void Init(float x, float y, int width, int height);	
 

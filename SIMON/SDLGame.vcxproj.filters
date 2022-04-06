@@ -47,4 +47,36 @@
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="background.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="blowfish.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="health_apple.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="health_fish.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="health_onigiri.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="menu_scene_bg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="rotten_apple.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="rotten_fish.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="rotten_onigiri.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="sumo_idle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
