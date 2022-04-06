@@ -30,11 +30,11 @@ void ColourBlock::Init(float x, float y, int width, int height)
 	dimensions.y = height;
 }
 
-void ColourBlock::Draw(bool filled)
+void ColourBlock::Draw(SDL_Texture*& objSprite, bool filled)
 {
 	// create a bounding box based on the dimensions and position.
 	Graphics::SetColor(colour);
-	Graphics::DrawRect(transform, dimensions, filled);
+	Graphics::DrawRect(objSprite, transform, dimensions, filled);
 }
 
 void ColourBlock::Update()

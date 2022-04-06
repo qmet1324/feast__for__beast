@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 	char score[10];
 	int currentLives = 5;
 	char lives[10];
-	const int numFood = 3;
+
 	bool filled = true;
 
 	SDL_Color Red = { 255, 0, 0 };
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	SDL_Color White = { 255, 255, 255 };
 
 	srand(time(NULL));
-
+	
 	if (!Graphics::Init())
 	{
 		return false;
@@ -56,8 +56,8 @@ int main(int argc, char* argv[])
 
 	// Objects
 	ColourBlock sumo;
-	ColourBlock badFood[numFood];
-	ColourBlock goodFood[numFood];
+	ColourBlock badFood[NUM_FOOD];
+	ColourBlock goodFood[NUM_FOOD];
 	ColourBlock blowfish;
 
 
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 	sumo.Init(800 / 2 - 25, 600 / 2 - 25, 25, 25);
 	sumo.SetColor(0x00, 0x00, 0xFF);
 
-	for (int i = 0; i < numFood; i++)
+	for (int i = 0; i < NUM_FOOD; i++)
 	{
 
 		PositionFood(badFood[i], rand() % 4); // Initialize Positions and Speed of bad food
@@ -96,17 +96,26 @@ int main(int argc, char* argv[])
 		GameRunning = EventHandler::Update();
 
 		// Render Player
-		sumo.Draw(filled);
+		//////////////////////////////////////////////////
+		// @todo: have to create a spritesheet class in order to make an animation of the sumo,
+		// the sprite of the sumo does not look promising 
+		//
+		sumo.Draw(Graphics::sumo_sprite,filled);
 		sumo.Move();
-
-
+		////////////////////////////////////////////////////////////////
+		
+		////////////////////////////////////////////////////////////////
+		// 
+		// @todo: redo for loop for the render of all bad and good food,
+		// right now it's rendering only bad and good apple rather than all three sprites (onigiri, apple, and fish),
+		// 
 		// Render Good and Bad Food
-		for (int i = 0; i < numFood; i++)
+		for (int i = 0; i < NUM_FOOD; i++)
 		{
 			badFood[i].Update();
-			badFood[i].Draw(filled);
+			badFood[i].Draw(Graphics::bFood_apple,filled);
 			goodFood[i].Update();
-			goodFood[i].Draw(filled);
+			goodFood[i].Draw(Graphics::gFood_apple,filled);
 
 			// Collision Detecttion bad food
 			if (checkCollision(sumo, badFood[i]))
@@ -124,10 +133,10 @@ int main(int argc, char* argv[])
 			RePosFood(badFood[i], sumo);
 			RePosFood(goodFood[i], sumo);
 		}
-
+		////////////////////////////////////////////////////////////////
 		// Render Blowfish
 		blowfish.Update();
-		blowfish.Draw(filled);
+		blowfish.Draw(Graphics::bFood_blowFish,filled);
 
 		// Collision Detecttion
 		if (checkCollision(sumo, blowfish))
