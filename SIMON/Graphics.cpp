@@ -2,6 +2,7 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
+
 SDL_Window* Graphics::window;
 SDL_Renderer* Graphics::renderer;
 
@@ -47,7 +48,10 @@ bool Graphics::Init()
 
 	// Initialize SDL_image Subsystem
 	int imgFlags = IMG_INIT_PNG;
-	IMG_Init(imgFlags)& imgFlags;
+	if (!(IMG_Init(imgFlags) & imgFlags))
+	{
+		return false;
+	}
 
 	if (LoadSprite("background.png", renderer, bg_sprite) < 0)
 	{

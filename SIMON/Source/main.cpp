@@ -5,6 +5,7 @@
 #include "Objects/ColourBlock.h"
 #include "../Graphics.h"
 
+
 // GameState
 bool GameRunning = true;
 
@@ -20,6 +21,7 @@ bool checkCollision(ColourBlock A, ColourBlock B);
 // argv[] : a char array of each of the params passed in ( each space is a new param)
 int main(int argc, char* argv[])
 {
+
 	int currentScore = 0;
 	char score[10];
 	int currentLives = 5;
@@ -69,7 +71,7 @@ int main(int argc, char* argv[])
 	
 
 	// Initialize Player
-	sumo.Init(800 / 2 - 25, 600 / 2 - 25, 25, 25);
+	sumo.Init(WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT / 2 - 25, 25, 25);
 	sumo.SetColor(0x00, 0x00, 0xFF);
 
 	for (int i = 0; i < NUM_FOOD; i++)
@@ -143,7 +145,7 @@ int main(int argc, char* argv[])
 		{
 			currentLives--;
 			RePosFood(blowfish, sumo);
-			sumo.Init(800 / 2 - 25, 600 / 2 - 25, 25, 25);
+			sumo.Init(WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT / 2 - 25, 25, 25);
 		}
 
 		// Respawn blowfish
@@ -156,8 +158,8 @@ int main(int argc, char* argv[])
 		Graphics::DrawText("Score: ", 0, 0, 100, 50, Cyan);
 		Graphics::DrawText(score, 110, 0, 100, 50, Cyan);
 
-		Graphics::DrawText("Lives: ", 800 - 125, 0, 100, 50, Magenta);
-		Graphics::DrawText(lives, 800 - 25, 0, 25, 50, Magenta);
+		Graphics::DrawText("Lives: ", WINDOW_WIDTH - 125, 0, 100, 50, Magenta);
+		Graphics::DrawText(lives, WINDOW_WIDTH - 25, 0, 25, 50, Magenta);
 
 		if (currentLives <= 0)
 		{
@@ -170,7 +172,7 @@ int main(int argc, char* argv[])
 	}
 
 
-	Graphics::DrawText("Game Over", 800 / 2 - 50, 600 / 2 - 25, 100, 50, White);
+	Graphics::DrawText("Game Over", WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 25, 100, 50, White);
 	//close off the SDL window
 	SDL_Quit();
 
@@ -182,19 +184,19 @@ void PositionFood(ColourBlock& foodType, int randomNumber)
 	switch (randomNumber)
 	{
 	case 0:
-		foodType.Init(rand() % (800 - 25), 0, 25, 25);
+		foodType.Init(rand() % (WINDOW_WIDTH - 25), 0, 25, 25);
 		foodType.SetVelocity(0, rand() % 5 + 5);
 		break;
 	case 1:
-		foodType.Init(rand() % (800 - 25), 600 - 25, 25, 25);
+		foodType.Init(rand() % (WINDOW_WIDTH - 25), WINDOW_HEIGHT - 25, 25, 25);
 		foodType.SetVelocity(0, (rand() % 5 + 5) * -1);
 		break;
 	case 2:
-		foodType.Init(0, rand() % (600 - 25), 25, 25);
+		foodType.Init(0, rand() % (WINDOW_HEIGHT - 25), 25, 25);
 		foodType.SetVelocity(rand() % 5 + 5, 0);
 		break;
 	case 3:
-		foodType.Init(800 - 25, rand() % (600 - 25), 25, 25);
+		foodType.Init(WINDOW_WIDTH - 25, rand() % (WINDOW_HEIGHT - 25), 25, 25);
 		foodType.SetVelocity((rand() % 5 + 5) * -1, 0);
 		break;
 	}
