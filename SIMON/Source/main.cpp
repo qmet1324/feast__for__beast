@@ -4,6 +4,10 @@
 // creating a basic gameobject
 #include "Objects/ColourBlock.h"
 #include "../Graphics.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+
 
 
 // GameState
@@ -24,9 +28,14 @@ int main(int argc, char* argv[])
 
 	int currentScore = 0;
 	char score[10];
+	int bestScore = 0;
+	char bScore[10];
+	string bScoreString;
 	int currentLives = 5;
 	char lives[10];
 	int timer = 0;
+
+	
 
 	bool filled = true;
 
@@ -89,6 +98,13 @@ int main(int argc, char* argv[])
 	//Initialize Blowfish
 	PositionFood(blowfish, rand() % 4);
 	blowfish.SetColor(0xFF, 0xFF, 0x00);
+
+	//Initialize Best score
+	ifstream inFile;
+	inFile.open("Best_Score.txt");
+	getline(inFile, bScoreString, '\n');
+	inFile.close();
+	bestScore = std::stoi(bScoreString);
 
 	// Main game loop
 	while (GameRunning)
@@ -176,13 +192,22 @@ int main(int argc, char* argv[])
 
 		// draw text
 		_itoa_s(currentLives, lives, 10);
-		_itoa_s(currentScore, score, 10);
-
 		Graphics::DrawText("Score: ", 0, 0, 100, 50, Cyan);
 		Graphics::DrawText(score, 110, 0, 100, 50, Cyan);
 
+		_itoa_s(currentScore, score, 10);
 		Graphics::DrawText("Lives: ", WINDOW_WIDTH - 125, 0, 100, 50, Magenta);
 		Graphics::DrawText(lives, WINDOW_WIDTH - 25, 0, 25, 50, Magenta);
+
+		
+		if (currentScore >= bestScore)
+		{
+			bestScore = currentScore;
+		}
+
+		_itoa_s(bestScore, bScore, 10);
+		Graphics::DrawText("Best Score: ", 0, 50, 200, 50, Yellow);
+		Graphics::DrawText(bScore, 220, 50, 100, 50, Yellow);
 
 		if (currentLives <= 0)
 		{
@@ -196,6 +221,12 @@ int main(int argc, char* argv[])
 
 
 	Graphics::DrawText("Game Over", WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 25, 100, 50, White);
+
+	ofstream outFile;
+	outFile.open("Best_Score.txt");
+	outFile << bestScore;
+	outFile.close();
+
 	//close off the SDL window
 	SDL_Quit();
 
