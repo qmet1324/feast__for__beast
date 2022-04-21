@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
 	ColourBlock badFood[NUM_FOOD];
 	ColourBlock goodFood[NUM_FOOD];
 	ColourBlock blowfish;
-
+	ColourBlock background;
 
 	//// where in the animation or entry is the current index
 	//int currentPatternIndex = 0;
@@ -79,6 +79,9 @@ int main(int argc, char* argv[])
 	//bool isBlankFrame = true;
 	//int currentPatternSize = 4;
 	
+	// Initialize Background Image
+	background.Init(0, 0, 800, 600);
+	background.SetColor(0xFF, 0x00, 0x00);
 
 	// Initialize Player
 	sumo.Init(WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50, 50, 50);
@@ -121,6 +124,8 @@ int main(int argc, char* argv[])
 		// @todo: have to create a spritesheet class in order to make an animation of the sumo,
 		// the sprite of the sumo does not look promising 
 		//
+		background.Draw(Graphics::bg_sprite, filled);
+
 		sumo.Draw(Graphics::sumo_sprite,filled);
 		
 		sumo.Move();
