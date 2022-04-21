@@ -23,6 +23,8 @@ int Graphics::sprite_w;
 int Graphics::sprite_h;
 
 
+
+
 bool Graphics::Init()
 {
 	// create little window with minimize and x to close 
@@ -147,7 +149,7 @@ void Graphics::EndRender()
 // example based on the code from: https://stackoverflow.com/questions/22886500/how-to-render-text-in-sdl2
 void Graphics::DrawText(const char * text, float x, float y, int width, int height, SDL_Color color)
 {
-	TTF_Font* font = TTF_OpenFont("arialbd.ttf", 24);
+	TTF_Font* font = TTF_OpenFont("NipponLatin-Bold.ttf", 24);
 
 	SDL_Color Red = { 255, 0, 0 };
 

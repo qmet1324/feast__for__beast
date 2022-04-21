@@ -57,7 +57,7 @@ void ColourBlock::Move()
 	{
 		transform.position.y -= 10;
 	}
-	if (inputs.events[1] && transform.position.y < 600 - 25)
+	if (inputs.events[1] && transform.position.y < 600 - 50)
 	{
 		transform.position.y += 10;
 	}
@@ -65,7 +65,7 @@ void ColourBlock::Move()
 	{
 		transform.position.x -= 10;
 	}
-	if (inputs.events[3] && transform.position.x < 800 - 25)
+	if (inputs.events[3] && transform.position.x < 800 - 50)
 	{
 		transform.position.x += 10;
 	}

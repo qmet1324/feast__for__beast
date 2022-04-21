@@ -79,4 +79,12 @@
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="Ninjago.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
+    <Font Include="NipponLatin-Bold.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
+  </ItemGroup>
 </Project>

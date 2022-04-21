@@ -26,6 +26,7 @@ int main(int argc, char* argv[])
 	char score[10];
 	int currentLives = 5;
 	char lives[10];
+	int timer = 0;
 
 	bool filled = true;
 
@@ -71,7 +72,7 @@ int main(int argc, char* argv[])
 	
 
 	// Initialize Player
-	sumo.Init(WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT / 2 - 25, 25, 25);
+	sumo.Init(WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50, 50, 50);
 	sumo.SetColor(0x00, 0x00, 0xFF);
 
 	for (int i = 0; i < NUM_FOOD; i++)
@@ -94,6 +95,8 @@ int main(int argc, char* argv[])
 	{
 		Graphics::StartRender();
 
+		static Uint32 count = 0;
+
 		// handle button events
 		GameRunning = EventHandler::Update();
 
@@ -103,7 +106,11 @@ int main(int argc, char* argv[])
 		// the sprite of the sumo does not look promising 
 		//
 		sumo.Draw(Graphics::sumo_sprite,filled);
+		
 		sumo.Move();
+
+
+
 		////////////////////////////////////////////////////////////////
 		
 		////////////////////////////////////////////////////////////////
@@ -115,9 +122,25 @@ int main(int argc, char* argv[])
 		for (int i = 0; i < NUM_FOOD; i++)
 		{
 			badFood[i].Update();
-			badFood[i].Draw(Graphics::bFood_apple,filled);
 			goodFood[i].Update();
-			goodFood[i].Draw(Graphics::gFood_apple,filled);
+
+			if (i % 3 == 0)
+			{
+				badFood[i].Draw(Graphics::bFood_apple, filled);
+				goodFood[i].Draw(Graphics::gFood_apple, filled);
+			}
+
+			if (i % 3 == 1)
+			{
+				badFood[i].Draw(Graphics::bFood_onigiri, filled);
+				goodFood[i].Draw(Graphics::gFood_onigiri, filled);
+			}
+
+			if (i % 3 == 2)
+			{
+				badFood[i].Draw(Graphics::bFood_fish, filled);
+				goodFood[i].Draw(Graphics::gFood_fish, filled);
+			}
 
 			// Collision Detecttion bad food
 			if (checkCollision(sumo, badFood[i]))
@@ -145,7 +168,7 @@ int main(int argc, char* argv[])
 		{
 			currentLives--;
 			RePosFood(blowfish, sumo);
-			sumo.Init(WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT / 2 - 25, 25, 25);
+			sumo.Init(WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50, 50, 50);
 		}
 
 		// Respawn blowfish
@@ -184,19 +207,19 @@ void PositionFood(ColourBlock& foodType, int randomNumber)
 	switch (randomNumber)
 	{
 	case 0:
-		foodType.Init(rand() % (WINDOW_WIDTH - 25), 0, 25, 25);
+		foodType.Init(rand() % (WINDOW_WIDTH - 50), 0, 50, 50);
 		foodType.SetVelocity(0, rand() % 5 + 5);
 		break;
 	case 1:
-		foodType.Init(rand() % (WINDOW_WIDTH - 25), WINDOW_HEIGHT - 25, 25, 25);
+		foodType.Init(rand() % (WINDOW_WIDTH - 50), WINDOW_HEIGHT - 50, 50, 50);
 		foodType.SetVelocity(0, (rand() % 5 + 5) * -1);
 		break;
 	case 2:
-		foodType.Init(0, rand() % (WINDOW_HEIGHT - 25), 25, 25);
+		foodType.Init(0, rand() % (WINDOW_HEIGHT - 50), 50, 50);
 		foodType.SetVelocity(rand() % 5 + 5, 0);
 		break;
 	case 3:
-		foodType.Init(WINDOW_WIDTH - 25, rand() % (WINDOW_HEIGHT - 25), 25, 25);
+		foodType.Init(WINDOW_WIDTH - 50, rand() % (WINDOW_HEIGHT - 50), 50, 50);
 		foodType.SetVelocity((rand() % 5 + 5) * -1, 0);
 		break;
 	}
