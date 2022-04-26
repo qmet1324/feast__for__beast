@@ -46,25 +46,25 @@ int main(int argc, char* argv[])
 	SDL_Color Cyan = { 0, 255, 255 };
 	SDL_Color Magenta = { 255, 0, 255 };
 	SDL_Color White = { 255, 255, 255 };
+	SDL_Color Black = { 0, 0, 0 };
 
 	srand(time(NULL));
 	
-	if (!Graphics::Init())
+
+	//
+	// @todo: i have made an exception, which checks if all subsystems have been loaded successfully, but it doesn't show anything,
+	// i was trying to find where i can see the console when we compile the program as we usually have in James labs,
+	// but i didn't find out how you can see it when compiling it. Maybe it's a specific setting, who knows.
+	//
+	try
 	{
-		return false;
+		Graphics::Init();
 	}
-
-	/*const int MAX_PATTERN_SIZE = 9;
-	const int BOARDSIZE = 9;
-	
-
-	int indexOrder[MAX_PATTERN_SIZE];
-
-	for (int i = 0; i < MAX_PATTERN_SIZE; i++)
+	catch (bool)
 	{
-		indexOrder[i] = rand() % BOARDSIZE;
+		printf("SDL_Init failed: %s\n", SDL_GetError());
+		GameRunning = false;
 	}
-	int lvl = 1;*/
 
 	// Objects
 	ColourBlock sumo;
@@ -72,12 +72,6 @@ int main(int argc, char* argv[])
 	ColourBlock goodFood[NUM_FOOD];
 	ColourBlock blowfish;
 	ColourBlock background;
-
-	//// where in the animation or entry is the current index
-	//int currentPatternIndex = 0;
-	//bool isAnimating = true;
-	//bool isBlankFrame = true;
-	//int currentPatternSize = 4;
 	
 	// Initialize Background Image
 	background.Init(0, 0, 800, 600);
@@ -119,27 +113,12 @@ int main(int argc, char* argv[])
 		// handle button events
 		GameRunning = EventHandler::Update();
 
-		// Render Player
-		//////////////////////////////////////////////////
-		// @todo: have to create a spritesheet class in order to make an animation of the sumo,
-		// the sprite of the sumo does not look promising 
-		//
 		background.Draw(Graphics::bg_sprite, filled);
 
 		sumo.Draw(Graphics::sumo_sprite,filled);
 		
 		sumo.Move();
 
-
-
-		////////////////////////////////////////////////////////////////
-		
-		////////////////////////////////////////////////////////////////
-		// 
-		// @todo: redo for loop for the render of all bad and good food,
-		// right now it's rendering only bad and good apple rather than all three sprites (onigiri, apple, and fish),
-		// 
-		// Render Good and Bad Food
 		for (int i = 0; i < NUM_FOOD; i++)
 		{
 			badFood[i].Update();
@@ -179,7 +158,7 @@ int main(int argc, char* argv[])
 			RePosFood(badFood[i], sumo);
 			RePosFood(goodFood[i], sumo);
 		}
-		////////////////////////////////////////////////////////////////
+
 		// Render Blowfish
 		blowfish.Update();
 		blowfish.Draw(Graphics::bFood_blowFish,filled);
@@ -197,12 +176,12 @@ int main(int argc, char* argv[])
 
 		// draw text
 		_itoa_s(currentLives, lives, 10);
-		Graphics::DrawText("Score: ", 0, 0, 100, 50, Cyan);
-		Graphics::DrawText(score, 110, 0, 100, 50, Cyan);
+		Graphics::DrawText("Score: ", 15, 15, 100, 50, Yellow);
+		Graphics::DrawText(score, 125, 15, 85, 50, Yellow);
 
 		_itoa_s(currentScore, score, 10);
-		Graphics::DrawText("Lives: ", WINDOW_WIDTH - 125, 0, 100, 50, Magenta);
-		Graphics::DrawText(lives, WINDOW_WIDTH - 25, 0, 25, 50, Magenta);
+		Graphics::DrawText("Lives: ", WINDOW_WIDTH - 145, 15, 100, 50, Red);
+		Graphics::DrawText(lives, WINDOW_WIDTH - 45, 15, 25, 50, Red);
 
 		
 		if (currentScore >= bestScore)
@@ -211,8 +190,8 @@ int main(int argc, char* argv[])
 		}
 
 		_itoa_s(bestScore, bScore, 10);
-		Graphics::DrawText("Best Score: ", 0, 50, 200, 50, Yellow);
-		Graphics::DrawText(bScore, 220, 50, 100, 50, Yellow);
+		Graphics::DrawText("Best Score: ", 15, 65, 200, 50, Black);
+		Graphics::DrawText(bScore, 220, 65, 100, 50, Black);
 
 		if (currentLives <= 0)
 		{

@@ -36,63 +36,65 @@ bool Graphics::Init()
 
 	if (!window)
 	{
-		return false;
+		throw false;
 	}
 
 	// fill in that window with a virtual canvas to draw on called a renderer
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	if (!renderer)
 	{
-		return false;
+		throw false;
 	}
 
 	TTF_Init();
 
 	// Initialize SDL_image Subsystem
+	// throws a bool type variable to the main cpp (try/catch - exception handling) to see if all files have been loaded successfully
+	// if not, it shows an error to the console, and exits the game 
 	int imgFlags = IMG_INIT_PNG;
 	if (!(IMG_Init(imgFlags) & imgFlags))
 	{
-		return false;
+		throw false;
 	}
 
 	if (LoadSprite("background.png", renderer, bg_sprite) < 0)
 	{
-		return false;
+		throw false;
 	}
 	if (LoadSprite("sumo_idle.png", renderer, sumo_sprite) < 0)
 	{
-		return false;
+		throw false;
 	}
 
 	if (LoadSprite("health_apple.png", renderer, gFood_apple) < 0)
 	{
-		return false;
+		throw false;
 	}
 	if (LoadSprite("health_fish.png", renderer, gFood_fish) < 0)
 	{
-		return false;
+		throw false;
 	}
 	if (LoadSprite("health_onigiri.png", renderer, gFood_onigiri) < 0)
 	{
-		return false;
+		throw false;
 	}
 
 	if (LoadSprite("rotten_apple.png", renderer, bFood_apple) < 0)
 	{
-		return false;
+		throw false;
 	}
 	if (LoadSprite("rotten_fish.png", renderer, bFood_fish) < 0)
 	{
-		return false;
+		throw false;
 	}
 	if (LoadSprite("rotten_onigiri.png", renderer, bFood_onigiri) < 0)
 	{
-		return false;
+		throw false;
 	}
 	
 	if (LoadSprite("blowfish.png", renderer, bFood_blowFish) < 0)
 	{
-		return false;
+		throw false;
 	}
 
 	return true;

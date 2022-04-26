@@ -54,6 +54,12 @@ bool EventHandler::Update()
 			SetButton(GameEvents::DOWN_PRESSED, currEvents.key.type == SDL_KEYDOWN);
 			break;
 		}
+		// press escape to quit the game
+		case SDLK_ESCAPE:
+		{
+			success = false;
+			break;
+		}
 		}
 	}
 	return success;
