@@ -71,3 +71,8 @@ void ColourBlock::Move()
 	}
 
 }
+
+void ColourBlock::MoveController() 
+{
+
+}

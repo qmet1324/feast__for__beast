@@ -10,6 +10,7 @@
 
 
 
+
 // GameState
 bool GameRunning = true;
 
@@ -18,6 +19,7 @@ void PositionFood(ColourBlock& foodType, int randomNumber);
 void RePosFood(ColourBlock& foodType, ColourBlock& player);
 
 bool checkCollision(ColourBlock A, ColourBlock B);
+
 
 // argc and argv here are command line parameters passed to the program when running the program. 
 // we won't actually use them but our 2D Graphics Library requires the main setup like this.
@@ -28,6 +30,7 @@ int main(int argc, char* argv[])
 
 	int currentScore = 0;
 	char score[10];
+	string scoreString;
 	int bestScore = 0;
 	char bScore[10];
 	string bScoreString;
@@ -143,7 +146,7 @@ int main(int argc, char* argv[])
 			}
 
 			// Collision Detecttion bad food
-			if (checkCollision(sumo, badFood[i]))
+			if (checkCollision(sumo, badFood[i]) && currentScore > 0)
 			{
 				currentScore -= 50;
 			}
@@ -175,13 +178,34 @@ int main(int argc, char* argv[])
 		RePosFood(blowfish, sumo);
 
 		// draw text
-		_itoa_s(currentLives, lives, 10);
-		Graphics::DrawText("Score: ", 15, 15, 100, 50, Yellow);
-		Graphics::DrawText(score, 125, 15, 85, 50, Yellow);
 
 		_itoa_s(currentScore, score, 10);
-		Graphics::DrawText("Lives: ", WINDOW_WIDTH - 145, 15, 100, 50, Red);
-		Graphics::DrawText(lives, WINDOW_WIDTH - 45, 15, 25, 50, Red);
+		if (strlen(score) == 1)
+		{
+			scoreString = "000";
+			scoreString.append(score);
+			strcpy_s(score, scoreString.c_str());
+		}		
+		else if (strlen(score) == 2)
+		{
+			scoreString = "00";
+			scoreString.append(score);
+			strcpy_s(score, scoreString.c_str());
+		}
+		else if (strlen(score) == 3)
+		{
+			scoreString = "0";
+			scoreString.append(score);
+			strcpy_s(score, scoreString.c_str());
+		}
+
+		Graphics::DrawText("scorE: ", 0, 10, 100, 50, Red);
+		Graphics::DrawText(score, 110, 10, 100, 50, Red);
+
+		_itoa_s(currentLives, lives, 10);
+		Graphics::DrawText("LivEs: ", WINDOW_WIDTH - 125, 10, 100, 50, Red);
+		Graphics::DrawText(lives, WINDOW_WIDTH - 25, 10, 25, 50, Red);
+
 
 		
 		if (currentScore >= bestScore)
@@ -190,8 +214,28 @@ int main(int argc, char* argv[])
 		}
 
 		_itoa_s(bestScore, bScore, 10);
-		Graphics::DrawText("Best Score: ", 15, 65, 200, 50, Black);
-		Graphics::DrawText(bScore, 220, 65, 100, 50, Black);
+
+		if (strlen(bScore) == 1)
+		{
+			bScoreString = "000";
+			bScoreString.append(bScore);
+			strcpy_s(bScore, bScoreString.c_str());
+		}
+		else if (strlen(bScore) == 2)
+		{
+			bScoreString = "00";
+			bScoreString.append(bScore);
+			strcpy_s(bScore, bScoreString.c_str());
+		}
+		else if (strlen(bScore) == 3)
+		{
+			bScoreString = "0";
+			bScoreString.append(bScore);
+			strcpy_s(bScore, bScoreString.c_str());
+		}
+
+		Graphics::DrawText("BEst sCORE: ", 0, 60, 200, 50, Red);
+		Graphics::DrawText(bScore, 220, 60, 100, 50, Red);
 
 		if (currentLives <= 0)
 		{

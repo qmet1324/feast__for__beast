@@ -20,6 +20,8 @@ public:
 
 	void Move();
 
+	void MoveController();
+
 	Transform2D GetTransform() { return transform; }
 	Vec2D GetDimensions() { return dimensions; }
 	Colour GetColor() { return colour; }
