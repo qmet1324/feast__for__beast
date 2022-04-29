@@ -20,6 +20,7 @@ public:
 
 	void SetPosition(int x, int y);
 
+
 	void Move();
 
 	void MoveController();
@@ -30,6 +31,9 @@ public:
 
 	int GetVelocityX() { return velocityX; }
 	int GetVelocityY() { return velocityY; }
+	int GetPositionX() { return transform.position.x; }
+	int GetPositionY() { return transform.position.y; }
+	
 
 private:
 

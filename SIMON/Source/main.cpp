@@ -37,6 +37,8 @@ int main(int argc, char* argv[])
 	int currentLives = 5;
 	char lives[10];
 	int timer = 0;
+	int level = 1;
+	int scoreRemember = 0;
 	Controller* xboxController = new Controller;
 
 	bool filled = true;
@@ -72,7 +74,7 @@ int main(int argc, char* argv[])
 	ColourBlock sumo;
 	ColourBlock badFood[NUM_FOOD];
 	ColourBlock goodFood[NUM_FOOD];
-	ColourBlock blowfish;
+	ColourBlock* blowfish = new ColourBlock[level];
 	ColourBlock background;
 	
 	// Initialize Background Image
@@ -95,8 +97,8 @@ int main(int argc, char* argv[])
 	}
 
 	//Initialize Blowfish
-	PositionFood(blowfish, rand() % 4);
-	blowfish.SetColor(0xFF, 0xFF, 0x00);
+	PositionFood(blowfish[0], rand() % 4);
+	blowfish[0].SetColor(0xFF, 0xFF, 0x00);
 
 	//Initialize Best score
 	ifstream inFile;
@@ -125,19 +127,19 @@ int main(int argc, char* argv[])
 		// Move with xbox controller (d-pad and Left Analog Stick) // Added a deadzone of 0.5 to the joystick so the character won't move with a small move of the joystick and to compensate my own controller drift.
 		xboxController->Update();
 
-		if (xboxController->IsUpPressed() || xboxController->GetLeftStickYValue() / 32767.0f > 0.5)
+		if ((xboxController->IsUpPressed() || xboxController->GetLeftStickYValue() / 32767.0f > 0.5) && sumo.GetPositionY() > 0)
 		{
 			sumo.SetPosition(0, -10);
 		}
-		if (xboxController->IsDownPressed() || xboxController->GetLeftStickYValue() / 32767.0f < -0.5)
+		if ((xboxController->IsDownPressed() || xboxController->GetLeftStickYValue() / 32767.0f < -0.5) && sumo.GetPositionY() < WINDOW_HEIGHT - 50)
 		{
 			sumo.SetPosition(0, 10);
 		}
-		if (xboxController->IsLeftPressed() || xboxController->GetLeftStickXValue() / 32767.0f < -0.5)
+		if ((xboxController->IsLeftPressed() || xboxController->GetLeftStickXValue() / 32767.0f < -0.5) && sumo.GetPositionX() > 0)
 		{
 			sumo.SetPosition(-10, 0);
 		}
-		if (xboxController->IsRightPressed() || xboxController->GetLeftStickXValue() / 32767.0f > 0.5)
+		if ((xboxController->IsRightPressed() || xboxController->GetLeftStickXValue() / 32767.0f > 0.5) && sumo.GetPositionX() < WINDOW_WIDTH - 50)
 		{
 			sumo.SetPosition(10, 0);
 		}
@@ -175,6 +177,19 @@ int main(int argc, char* argv[])
 			if (checkCollision(sumo, goodFood[i]))
 			{
 				currentScore += 100;
+				// Increase difficulty
+				if (currentScore % 1000 >= 0 && currentScore % 1000 <= 50 && currentScore > 0)
+				{
+					if (scoreRemember <= currentScore)
+					{
+						// Initialize more blowfish
+
+						scoreRemember = currentScore;
+						level++;
+						PositionFood(blowfish[level-1], rand() % 4);
+						blowfish[level-1].SetColor(0xFF, 0xFF, 0x00);
+					}
+				}
 			}
 
 			// Respawn Food
@@ -182,20 +197,29 @@ int main(int argc, char* argv[])
 			RePosFood(goodFood[i], sumo);
 		}
 
-		// Render Blowfish
-		blowfish.Update();
-		blowfish.Draw(Graphics::bFood_blowFish,filled);
+		
 
-		// Collision Detecttion
-		if (checkCollision(sumo, blowfish))
+		// Render Blowfish
+		
+		for (int i = 0; i < level; i++)
 		{
-			currentLives--;
-			RePosFood(blowfish, sumo);
-			sumo.Init(WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50, 50, 50);
+			if (currentLives != 0)
+			{
+				blowfish[i].Update();
+				blowfish[i].Draw(Graphics::bFood_blowFish, filled);
+				if (checkCollision(sumo, blowfish[i]))
+				{
+					RePosFood(blowfish[i], sumo);
+					currentLives--;
+					sumo.Init(WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50, 50, 50);
+				}
+				RePosFood(blowfish[i], sumo);
+			}
 		}
 
-		// Respawn blowfish
-		RePosFood(blowfish, sumo);
+		
+
+		// Collision Detecttion
 
 		// Draw text
 		// Score Text
@@ -277,12 +301,15 @@ int main(int argc, char* argv[])
 	outFile << bestScore;
 	outFile.close();
 
-	// Delete controller
-	delete xboxController;
+	// Delete heap memory
+	
 
 	//close off the SDL window
 	SDL_Quit();
 
+	// Delete Heap Memory
+	delete xboxController;
+	delete[] blowfish;
 	return true;
 }
 
