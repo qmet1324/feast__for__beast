@@ -149,7 +149,7 @@ void Graphics::EndRender()
 }
 
 // example based on the code from: https://stackoverflow.com/questions/22886500/how-to-render-text-in-sdl2
-void Graphics::DrawText(const char * text, float x, float y, int width, int height, SDL_Color color)
+void Graphics::DrawSDLText(const char * text, float x, float y, int width, int height, SDL_Color color)
 {
 	TTF_Font* font = TTF_OpenFont("NipponLatin-Bold.ttf", 24);
 

@@ -1,4 +1,5 @@
 #include "EventHandler.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -61,9 +62,6 @@ bool EventHandler::Update()
 			break;
 		}
 		}
-
-		
-
 	}
 	return success;
 }
@@ -72,31 +70,8 @@ void EventHandler::SetButton(GameEvents eventNum, bool pressed)
 {
 	events[eventNum] = pressed;
 }
+
 void EventHandler::ControllerInput()
 {
-	/*xboxController->Update();
-
-	bool running = true;
-
-	while (running)
-	{
-		xboxController->Update();
-	}
-
-	if (xboxController->IsUpPressed())
-	{
-		SetButton(GameEvents::UP_PRESSED, xboxController->IsUpPressed());
-	}
-	if (xboxController->IsDownPressed())
-	{
-		SetButton(GameEvents::DOWN_PRESSED, xboxController->IsDownPressed());
-	}
-	if (xboxController->IsLeftPressed())
-	{
-		SetButton(GameEvents::LEFT_PRESSED, xboxController->IsLeftPressed());
-	}
-	if (xboxController->IsRightPressed())
-	{
-		SetButton(GameEvents::RIGHT_PRESSED, xboxController->IsRightPressed());
-	}*/
+	
 }

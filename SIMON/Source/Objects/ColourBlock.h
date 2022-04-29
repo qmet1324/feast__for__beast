@@ -18,6 +18,8 @@ public:
 
 	void SetVelocity(int x, int y);
 
+	void SetPosition(int x, int y);
+
 	void Move();
 
 	void MoveController();

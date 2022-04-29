@@ -8,11 +8,14 @@ EventHandler inputs;
 
 ColourBlock::ColourBlock()
 {
+	
 }
 
 ColourBlock::~ColourBlock()
 {
 }
+
+
 
 void ColourBlock::SetColor(int r, int g, int b)
 {
@@ -47,6 +50,12 @@ void ColourBlock::SetVelocity(int x, int y)
 {
 	velocityX = x;
 	velocityY = y;
+}
+
+void ColourBlock::SetPosition(int x, int y)
+{
+	transform.position.x += x;
+	transform.position.y += y;
 }
 
 // Move function to move player character.

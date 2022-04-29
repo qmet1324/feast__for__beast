@@ -1,15 +1,15 @@
 // processing events
 #include "EventHandler.h"
 #include <ctime>
+
 // creating a basic gameobject
 #include "Objects/ColourBlock.h"
 #include "../Graphics.h"
+
 #include <iostream>
 #include <fstream>
 #include <string>
-
-
-
+#include "../Controller.h"
 
 // GameState
 bool GameRunning = true;
@@ -37,8 +37,7 @@ int main(int argc, char* argv[])
 	int currentLives = 5;
 	char lives[10];
 	int timer = 0;
-
-	
+	Controller* xboxController = new Controller;
 
 	bool filled = true;
 
@@ -116,30 +115,51 @@ int main(int argc, char* argv[])
 		// handle button events
 		GameRunning = EventHandler::Update();
 
-		background.Draw(Graphics::bg_sprite, filled);
+		background.Draw(Graphics::bg_sprite, filled); // Draw background
 
-		sumo.Draw(Graphics::sumo_sprite,filled);
+		sumo.Draw(Graphics::sumo_sprite,filled); // Draw Player
 		
+		// Move with keyboard (WSAD)
 		sumo.Move();
+
+		// Move with xbox controller (d-pad and Left Analog Stick) // Added a deadzone of 0.5 to the joystick so the character won't move with a small move of the joystick and to compensate my own controller drift.
+		xboxController->Update();
+
+		if (xboxController->IsUpPressed() || xboxController->GetLeftStickYValue() / 32767.0f > 0.5)
+		{
+			sumo.SetPosition(0, -10);
+		}
+		if (xboxController->IsDownPressed() || xboxController->GetLeftStickYValue() / 32767.0f < -0.5)
+		{
+			sumo.SetPosition(0, 10);
+		}
+		if (xboxController->IsLeftPressed() || xboxController->GetLeftStickXValue() / 32767.0f < -0.5)
+		{
+			sumo.SetPosition(-10, 0);
+		}
+		if (xboxController->IsRightPressed() || xboxController->GetLeftStickXValue() / 32767.0f > 0.5)
+		{
+			sumo.SetPosition(10, 0);
+		}
 
 		for (int i = 0; i < NUM_FOOD; i++)
 		{
 			badFood[i].Update();
 			goodFood[i].Update();
 
-			if (i % 3 == 0)
+			if (i % 3 == 0) // Draw apples
 			{
 				badFood[i].Draw(Graphics::bFood_apple, filled);
 				goodFood[i].Draw(Graphics::gFood_apple, filled);
 			}
 
-			if (i % 3 == 1)
+			if (i % 3 == 1) // Draw onigiri
 			{
 				badFood[i].Draw(Graphics::bFood_onigiri, filled);
 				goodFood[i].Draw(Graphics::gFood_onigiri, filled);
 			}
 
-			if (i % 3 == 2)
+			if (i % 3 == 2) // Draw fish
 			{
 				badFood[i].Draw(Graphics::bFood_fish, filled);
 				goodFood[i].Draw(Graphics::gFood_fish, filled);
@@ -177,8 +197,8 @@ int main(int argc, char* argv[])
 		// Respawn blowfish
 		RePosFood(blowfish, sumo);
 
-		// draw text
-
+		// Draw text
+		// Score Text
 		_itoa_s(currentScore, score, 10);
 		if (strlen(score) == 1)
 		{
@@ -199,15 +219,16 @@ int main(int argc, char* argv[])
 			strcpy_s(score, scoreString.c_str());
 		}
 
-		Graphics::DrawText("scorE: ", 0, 10, 100, 50, Red);
-		Graphics::DrawText(score, 110, 10, 100, 50, Red);
+		Graphics::DrawSDLText("scorE: ", 0, 10, 100, 50, Yellow);
+		Graphics::DrawSDLText(score, 110, 10, 100, 50, Yellow);
 
+		// Lives Text
 		_itoa_s(currentLives, lives, 10);
-		Graphics::DrawText("LivEs: ", WINDOW_WIDTH - 125, 10, 100, 50, Red);
-		Graphics::DrawText(lives, WINDOW_WIDTH - 25, 10, 25, 50, Red);
+		Graphics::DrawSDLText("LivEs: ", WINDOW_WIDTH - 125, 10, 100, 50, Red);
+		Graphics::DrawSDLText(lives, WINDOW_WIDTH - 25, 10, 25, 50, Red);
 
 
-		
+		// Best Score Text
 		if (currentScore >= bestScore)
 		{
 			bestScore = currentScore;
@@ -234,8 +255,8 @@ int main(int argc, char* argv[])
 			strcpy_s(bScore, bScoreString.c_str());
 		}
 
-		Graphics::DrawText("BEst sCORE: ", 0, 60, 200, 50, Red);
-		Graphics::DrawText(bScore, 220, 60, 100, 50, Red);
+		Graphics::DrawSDLText("BEst sCORE: ", 0, 60, 200, 50, Black);
+		Graphics::DrawSDLText(bScore, 220, 60, 100, 50, Black);
 
 		if (currentLives <= 0)
 		{
@@ -248,12 +269,16 @@ int main(int argc, char* argv[])
 	}
 
 
-	Graphics::DrawText("Game Over", WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 25, 100, 50, White);
+	Graphics::DrawSDLText("Game Over", WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 25, 100, 50, White);
 
+	// Send Best Score to Score text file
 	ofstream outFile;
 	outFile.open("Best_Score.txt");
 	outFile << bestScore;
 	outFile.close();
+
+	// Delete controller
+	delete xboxController;
 
 	//close off the SDL window
 	SDL_Quit();
@@ -261,7 +286,7 @@ int main(int argc, char* argv[])
 	return true;
 }
 
-void PositionFood(ColourBlock& foodType, int randomNumber)
+void PositionFood(ColourBlock& foodType, int randomNumber) // Position Food at random spawnpoints and velocities.
 {
 	switch (randomNumber)
 	{
@@ -284,7 +309,7 @@ void PositionFood(ColourBlock& foodType, int randomNumber)
 	}
 }
 
-void RePosFood(ColourBlock& foodType, ColourBlock& player)
+void RePosFood(ColourBlock& foodType, ColourBlock& player) // RePosition Food at random spawnpoints and velocities after player collision or food leaving the screen.
 {
 	Transform2D Pos = foodType.GetTransform();
 
@@ -306,7 +331,7 @@ void RePosFood(ColourBlock& foodType, ColourBlock& player)
 	}
 }
 
-bool checkCollision(ColourBlock A, ColourBlock B)
+bool checkCollision(ColourBlock A, ColourBlock B) // Collision detector
 {
 
 	Transform2D posA, posB;

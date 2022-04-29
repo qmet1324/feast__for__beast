@@ -48,7 +48,7 @@ public:
 	static void SetColor(Colour color);
 	static void DrawRect(SDL_Texture*& objSprite, Transform2D transform, Vec2D dimensions, bool isFilled = false);
 	static void DrawLine(Transform2D transform, Vec2D dimensions);
-	static void DrawText(const char* text, float x, float y, int width, int height, SDL_Color color);
+	static void DrawSDLText(const char* text, float x, float y, int width, int height, SDL_Color color);
 
 	static int LoadSprite(const char* file, SDL_Renderer* renderer, SDL_Texture*& somesprite);
 
