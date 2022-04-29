@@ -37,7 +37,8 @@ int main(int argc, char* argv[])
 	int currentLives = 5;
 	char lives[10];
 	int timer = 0;
-	int level = 1;
+	int level = 0;
+	int blowFLen = 20;
 	int scoreRemember = 0;
 	Controller* xboxController = new Controller;
 
@@ -74,7 +75,7 @@ int main(int argc, char* argv[])
 	ColourBlock sumo;
 	ColourBlock badFood[NUM_FOOD];
 	ColourBlock goodFood[NUM_FOOD];
-	ColourBlock* blowfish = new ColourBlock[level];
+	ColourBlock* blowfish = new ColourBlock[blowFLen];
 	ColourBlock background;
 	
 	// Initialize Background Image
@@ -186,8 +187,8 @@ int main(int argc, char* argv[])
 
 						scoreRemember = currentScore;
 						level++;
-						PositionFood(blowfish[level-1], rand() % 4);
-						blowfish[level-1].SetColor(0xFF, 0xFF, 0x00);
+						PositionFood(blowfish[level], rand() % 4);
+						blowfish[level].SetColor(0xFF, 0xFF, 0x00);
 					}
 				}
 			}
